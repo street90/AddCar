@@ -8,8 +8,17 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+
+import com.song.addcarlibrary.AddCarLibiary;
+import com.song.addcarlibrary.addCarEndListener;
 
 public class MainActivity extends AppCompatActivity {
+
+    private ImageView ivStart,ivEnd;
+    private RelativeLayout rlRoot;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setVisibility(View.GONE);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -26,7 +36,45 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+
+
+        ivStart = (ImageView) findViewById(R.id.iv_start);
+
+
+        ivEnd = (ImageView) findViewById(R.id.iv_end);
+
+        rlRoot = (RelativeLayout) findViewById(R.id.rl_root);
+
+
+        ivStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AddCarLibiary.AddCar(ivStart, ivEnd, MainActivity.this, rlRoot, 3, new addCarEndListener() {
+                    @Override
+                    public void end() {
+
+                    }
+                });
+            }
+        });
+
+
+        ivEnd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AddCarLibiary.AddCar(ivEnd, ivStart, MainActivity.this, rlRoot, 3, new addCarEndListener() {
+                    @Override
+                    public void end() {
+
+                    }
+                });
+            }
+        });
+
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
