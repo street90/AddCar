@@ -9,8 +9,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-import java.lang.ref.SoftReference;
-
 /**
  * Created by song on 2016/9/15.
  */
@@ -24,52 +22,46 @@ public class AddCarLibiary {
      * @param parentView  //用于添加的动画的View 父布局
      * @param time //动画时间
      */
-    public static void AddCar(ImageView startView, View endView, Context mContext, RelativeLayout parentView, final int time, final addCarEndListener listener) {
+    public static void AddCar(ImageView startView, View endView, Context mContext, final RelativeLayout parentView, final int time, final addCarEndListener listener) {
 
-        /**
-         * 静态类中使用软引用是为了避免静态方法还持有资源不能释放导致内存溢出
-         */
-        SoftReference<Context> sfContext = new SoftReference<Context>(mContext);
-        SoftReference<ImageView> sfStartView = new SoftReference<ImageView>(startView);
-        SoftReference<View> sfEndView = new SoftReference<View>(endView);
-        final SoftReference<RelativeLayout> sfParentView = new SoftReference<RelativeLayout>(parentView);
+
 
         /**
          *创建一个View用于动画显示
          */
-        final ImageView view = new ImageView(sfContext.get());
-        view.setImageDrawable(sfStartView.get().getDrawable());
+        final ImageView view = new ImageView(mContext);
+        view.setImageDrawable(startView.getDrawable());
 
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(sfStartView.get().getWidth(),sfStartView.get().getHeight());
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(startView.getWidth(),startView.getHeight());
 
 
         /**
          * 父布局的位置
          */
         int[] parentLocation = new int[2];
-        sfParentView.get().getLocationInWindow(parentLocation);
+        parentView.getLocationInWindow(parentLocation);
 
         /**
          * 开始view的位置
          */
         int[] startLocation = new int[2];
-        sfStartView.get().getLocationInWindow(startLocation);
+        startView.getLocationInWindow(startLocation);
 
         /**
          * 购物车的位置
          */
         int[] endLocation = new int[2];
-        sfEndView.get().getLocationInWindow(endLocation);
+        endView.getLocationInWindow(endLocation);
 
-        params.leftMargin = startLocation[0] - parentLocation[0] - sfParentView.get().getPaddingLeft();
-        params.topMargin = startLocation[1] - parentLocation[1] - sfParentView.get().getPaddingTop();
+        params.leftMargin = startLocation[0] - parentLocation[0] - parentView.getPaddingLeft();
+        params.topMargin = startLocation[1] - parentLocation[1] - parentView.getPaddingTop();
 
-        sfParentView.get().addView(view,params);
+        parentView.addView(view,params);
 
         /**
          * x方向的移动距离
          */
-        int xL = endLocation[0] - startLocation[0] + sfEndView.get().getWidth() / 2 - sfStartView.get().getWidth() / 2;
+        int xL = endLocation[0] - startLocation[0] + endView.getWidth() / 2 - startView.getWidth() / 2;
 
         /**
          * x方向的速度
@@ -79,7 +71,7 @@ public class AddCarLibiary {
         /**
          * y方向的移动距离
          */
-        int yL = endLocation[1] - startLocation[1] + sfEndView.get().getHeight() / 2 - sfStartView.get().getHeight() / 2;
+        int yL = endLocation[1] - startLocation[1] + endView.getHeight() / 2 - startView.getHeight() / 2;
 
         /**
          * y方向的加速度
@@ -124,7 +116,7 @@ public class AddCarLibiary {
 
             @Override
             public void onAnimationEnd(Animator animator) {
-                sfParentView.get().removeView(view);
+                parentView.removeView(view);
                 listener.end();
             }
 
